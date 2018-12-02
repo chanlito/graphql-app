@@ -1,0 +1,28 @@
+# A URL to your GraphQL endpoint, a local path to .graphql file, a glob pattern to your GraphQL schema files,
+# or a JavaScript file that exports the schema to generate code from.
+# This can also be an array which specifies multiple schemas to generate code from.
+schema: src/app/app.typedefs.ts
+
+# A path to a file which defines custom Node.JS require() handlers for custom file extensions.
+# This is essential if the code generator has to go through files which require other files in an unsupported format (by default).
+require:
+  - ts-node/register/transpile-only
+  - tsconfig-paths/register
+
+# A map where the key represents an output path for the generated code
+# and the value represents a set of options which are relevant for that specific file.
+generates:
+  src/types/generated-models.ts:
+    plugins:
+      - typescript-common
+      - typescript-server
+      - typescript-resolvers
+
+# A flag to overwrite files in case they're already exist when generating code.
+overwrite: true
+
+# A flag to watch for changes in the specified GraphQL schemas and re-generate code any that happens.
+watch: false
+
+# A flag to not print errors in case they occur.
+silent: false

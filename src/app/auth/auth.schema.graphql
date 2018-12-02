@@ -1,0 +1,15 @@
+# import User from '../user/user.schema.graphql'
+
+type Mutation {
+  signIn(input: SignInInput): AuthPayload!
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+input SignInInput {
+  email: String!
+  password: String!
+}
