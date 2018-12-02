@@ -5,6 +5,6 @@ import { resolve } from 'path';
 import * as resolvers from './user.resolvers';
 
 export const UserModule = new GraphQLModule({
-  resolvers,
+  resolvers: resolvers as any,
   typeDefs: importSchema(resolve('.', 'src/app/user/user.schema.graphql')),
 });
