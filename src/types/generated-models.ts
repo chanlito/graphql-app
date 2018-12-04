@@ -1,7 +1,7 @@
-export interface SignInInput {
-  email: string;
+export interface CreateUserInput {
+  firstName: string;
 
-  password: string;
+  lastName: string;
 }
 
 // ====================================================
@@ -15,25 +15,15 @@ export interface Query {
 export interface User {
   id: string;
 
-  username: string;
+  firstName: string;
 
-  email: string;
+  lastName: string;
 
-  password: string;
-
-  createdAt: string;
-
-  updatedAt: string;
+  fullName: string;
 }
 
 export interface Mutation {
-  signIn: AuthPayload;
-}
-
-export interface AuthPayload {
-  token: string;
-
-  user: User;
+  createUser: User;
 }
 
 // ====================================================
@@ -43,11 +33,13 @@ export interface AuthPayload {
 export interface UserQueryArgs {
   id: string;
 }
-export interface SignInMutationArgs {
-  input?: SignInInput | null;
+export interface CreateUserMutationArgs {
+  input: CreateUserInput;
 }
 
 import { GraphQLResolveInfo, GraphQLScalarTypeConfig } from 'graphql';
+
+import { AppContext } from 'src/types/context';
 
 export type Resolver<Result, Parent = {}, Context = {}, Args = {}> = (
   parent: Parent,
@@ -101,107 +93,73 @@ export type DirectiveResolverFn<TResult, TArgs = {}, TContext = {}> = (
 ) => TResult | Promise<TResult>;
 
 export namespace QueryResolvers {
-  export interface Resolvers<Context = {}, TypeParent = {}> {
+  export interface Resolvers<Context = AppContext, TypeParent = {}> {
     user?: UserResolver<User, TypeParent, Context>;
   }
 
-  export type UserResolver<R = User, Parent = {}, Context = {}> = Resolver<
-    R,
-    Parent,
-    Context,
-    UserArgs
-  >;
+  export type UserResolver<
+    R = User,
+    Parent = {},
+    Context = AppContext
+  > = Resolver<R, Parent, Context, UserArgs>;
   export interface UserArgs {
     id: string;
   }
 }
 
 export namespace UserResolvers {
-  export interface Resolvers<Context = {}, TypeParent = User> {
+  export interface Resolvers<Context = AppContext, TypeParent = User> {
     id?: IdResolver<string, TypeParent, Context>;
 
-    username?: UsernameResolver<string, TypeParent, Context>;
+    firstName?: FirstNameResolver<string, TypeParent, Context>;
 
-    email?: EmailResolver<string, TypeParent, Context>;
+    lastName?: LastNameResolver<string, TypeParent, Context>;
 
-    password?: PasswordResolver<string, TypeParent, Context>;
-
-    createdAt?: CreatedAtResolver<string, TypeParent, Context>;
-
-    updatedAt?: UpdatedAtResolver<string, TypeParent, Context>;
+    fullName?: FullNameResolver<string, TypeParent, Context>;
   }
 
-  export type IdResolver<R = string, Parent = User, Context = {}> = Resolver<
-    R,
-    Parent,
-    Context
-  >;
-  export type UsernameResolver<
+  export type IdResolver<
     R = string,
     Parent = User,
-    Context = {}
+    Context = AppContext
   > = Resolver<R, Parent, Context>;
-  export type EmailResolver<R = string, Parent = User, Context = {}> = Resolver<
-    R,
-    Parent,
-    Context
-  >;
-  export type PasswordResolver<
+  export type FirstNameResolver<
     R = string,
     Parent = User,
-    Context = {}
+    Context = AppContext
   > = Resolver<R, Parent, Context>;
-  export type CreatedAtResolver<
+  export type LastNameResolver<
     R = string,
     Parent = User,
-    Context = {}
+    Context = AppContext
   > = Resolver<R, Parent, Context>;
-  export type UpdatedAtResolver<
+  export type FullNameResolver<
     R = string,
     Parent = User,
-    Context = {}
+    Context = AppContext
   > = Resolver<R, Parent, Context>;
 }
 
 export namespace MutationResolvers {
-  export interface Resolvers<Context = {}, TypeParent = {}> {
-    signIn?: SignInResolver<AuthPayload, TypeParent, Context>;
+  export interface Resolvers<Context = AppContext, TypeParent = {}> {
+    createUser?: CreateUserResolver<User, TypeParent, Context>;
   }
 
-  export type SignInResolver<
-    R = AuthPayload,
-    Parent = {},
-    Context = {}
-  > = Resolver<R, Parent, Context, SignInArgs>;
-  export interface SignInArgs {
-    input?: SignInInput | null;
-  }
-}
-
-export namespace AuthPayloadResolvers {
-  export interface Resolvers<Context = {}, TypeParent = AuthPayload> {
-    token?: TokenResolver<string, TypeParent, Context>;
-
-    user?: UserResolver<User, TypeParent, Context>;
-  }
-
-  export type TokenResolver<
-    R = string,
-    Parent = AuthPayload,
-    Context = {}
-  > = Resolver<R, Parent, Context>;
-  export type UserResolver<
+  export type CreateUserResolver<
     R = User,
-    Parent = AuthPayload,
-    Context = {}
-  > = Resolver<R, Parent, Context>;
+    Parent = {},
+    Context = AppContext
+  > = Resolver<R, Parent, Context, CreateUserArgs>;
+  export interface CreateUserArgs {
+    input: CreateUserInput;
+  }
 }
 
 /** Directs the executor to skip this field or fragment when the `if` argument is true. */
 export type SkipDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   SkipDirectiveArgs,
-  {}
+  AppContext
 >;
 export interface SkipDirectiveArgs {
   /** Skipped when true. */
@@ -212,7 +170,7 @@ export interface SkipDirectiveArgs {
 export type IncludeDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   IncludeDirectiveArgs,
-  {}
+  AppContext
 >;
 export interface IncludeDirectiveArgs {
   /** Included when true. */
@@ -223,7 +181,7 @@ export interface IncludeDirectiveArgs {
 export type DeprecatedDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   DeprecatedDirectiveArgs,
-  {}
+  AppContext
 >;
 export interface DeprecatedDirectiveArgs {
   /** Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax (as specified by [CommonMark](https://commonmark.org/). */

@@ -1,7 +1,7 @@
 # A URL to your GraphQL endpoint, a local path to .graphql file, a glob pattern to your GraphQL schema files,
 # or a JavaScript file that exports the schema to generate code from.
 # This can also be an array which specifies multiple schemas to generate code from.
-schema: src/app/app.typedefs.ts
+schema: src/app/app.schema.ts
 
 # A path to a file which defines custom Node.JS require() handlers for custom file extensions.
 # This is essential if the code generator has to go through files which require other files in an unsupported format (by default).
@@ -13,6 +13,8 @@ require:
 # and the value represents a set of options which are relevant for that specific file.
 generates:
   src/types/generated-models.ts:
+    config:
+      contextType: src/types/context#AppContext
     plugins:
       - typescript-common
       - typescript-server

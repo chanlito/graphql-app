@@ -1,12 +1,21 @@
+# import User from '../../lib/prisma/prisma.graphql'
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+}
+
 type Query {
   user(id: String!): User!
 }
 
 type User {
   id: ID!
-  username: String!
-  email: String!
-  password: String!
-  createdAt: String!
-  updatedAt: String!
+  firstName: String!
+  lastName: String!
+  fullName: String!
+}
+
+input CreateUserInput {
+  firstName: String!
+  lastName: String!
 }

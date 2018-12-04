@@ -1,0 +1,9 @@
+# TODO: implement this?!
+mutation {
+  createUser(input: { firstName: "Chanlito", lastName: "Hem" }) {
+    id
+    firstName
+    lastName
+    fullName
+  }
+}
