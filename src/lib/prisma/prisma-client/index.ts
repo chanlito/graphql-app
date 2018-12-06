@@ -363,7 +363,7 @@ export type ID_Input = string | number;
 export type ID_Output = string;
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
 export type Int = number;
 
@@ -387,10 +387,16 @@ export const models = [
  * Type Defs
  */
 
+const {
+  PRISMA_ENDPOINT = 'https://us1.prisma.sh/chanlito-607279/graphql-app/dev', // this uses primsa demo server
+  PRISMA_MANAGEMENT_API_SECRET,
+} = process.env;
+
 export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
   models,
-  endpoint: `${process.env["PRISMA_ENDPOINT"]}`,
-  secret: `${process.env["PRISMA_MANAGEMENT_API_SECRET"]}`
+  endpoint: PRISMA_ENDPOINT,
+  secret: PRISMA_MANAGEMENT_API_SECRET
 });
+
 export const prisma = new Prisma();

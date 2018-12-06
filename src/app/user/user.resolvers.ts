@@ -1,9 +1,10 @@
 import { MutationResolvers, QueryResolvers, UserResolvers } from '@/types';
 import { ApolloError } from 'apollo-server-core';
+import { Prisma as PrismaBinding } from 'prisma-binding';
 
 export const Mutation: MutationResolvers.Resolvers = {
-  createUser: async (parent, args, ctx, info) => {
-    const user = await ctx.db.mutation.createUser({
+  createUser: async (parent, args, { injector }, info) => {
+    const user = await injector.get(PrismaBinding).mutation.createUser({
       data: {
         firstName: args.input.firstName,
         lastName: args.input.lastName,
@@ -14,8 +15,8 @@ export const Mutation: MutationResolvers.Resolvers = {
 };
 
 export const Query: QueryResolvers.Resolvers = {
-  user: async (parent, args, ctx, info) => {
-    const user = await ctx.networkRequest.db.query.user({ where: { id: args.id } }, info);
+  user: async (parent, args, { injector }, info) => {
+    const user = await injector.get(PrismaBinding).query.user({ where: { id: args.id } }, info);
     if (!user) throw new ApolloError('User not found.');
     return { ...user, fullName: '' };
   },
