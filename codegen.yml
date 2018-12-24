@@ -14,7 +14,7 @@ require:
 generates:
   src/types/generated-models.ts:
     config:
-      contextType: src/types/context#AppContext
+      contextType: '@graphql-modules/core#ModuleContext'
     plugins:
       - typescript-common
       - typescript-server

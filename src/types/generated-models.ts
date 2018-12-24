@@ -1,3 +1,5 @@
+export type Maybe<T> = T | null;
+
 export interface CreateUserInput {
   firstName: string;
 
@@ -37,9 +39,9 @@ export interface CreateUserMutationArgs {
   input: CreateUserInput;
 }
 
-import { GraphQLResolveInfo, GraphQLScalarTypeConfig } from 'graphql';
+import { GraphQLResolveInfo } from 'graphql';
 
-import { AppContext } from 'src/types/context';
+import { ModuleContext } from '@graphql-modules/core';
 
 export type Resolver<Result, Parent = {}, Context = {}, Args = {}> = (
   parent: Parent,
@@ -74,8 +76,6 @@ export type SubscriptionResolver<
     ) => ISubscriptionResolverObject<Result, Parent, Context, Args>)
   | ISubscriptionResolverObject<Result, Parent, Context, Args>;
 
-type Maybe<T> = T | null | undefined;
-
 export type TypeResolveFn<Types, Parent = {}, Context = {}> = (
   parent: Parent,
   context: Context,
@@ -93,14 +93,14 @@ export type DirectiveResolverFn<TResult, TArgs = {}, TContext = {}> = (
 ) => TResult | Promise<TResult>;
 
 export namespace QueryResolvers {
-  export interface Resolvers<Context = AppContext, TypeParent = {}> {
+  export interface Resolvers<Context = ModuleContext, TypeParent = {}> {
     user?: UserResolver<User, TypeParent, Context>;
   }
 
   export type UserResolver<
     R = User,
     Parent = {},
-    Context = AppContext
+    Context = ModuleContext
   > = Resolver<R, Parent, Context, UserArgs>;
   export interface UserArgs {
     id: string;
@@ -108,7 +108,7 @@ export namespace QueryResolvers {
 }
 
 export namespace UserResolvers {
-  export interface Resolvers<Context = AppContext, TypeParent = User> {
+  export interface Resolvers<Context = ModuleContext, TypeParent = User> {
     id?: IdResolver<string, TypeParent, Context>;
 
     firstName?: FirstNameResolver<string, TypeParent, Context>;
@@ -121,34 +121,34 @@ export namespace UserResolvers {
   export type IdResolver<
     R = string,
     Parent = User,
-    Context = AppContext
+    Context = ModuleContext
   > = Resolver<R, Parent, Context>;
   export type FirstNameResolver<
     R = string,
     Parent = User,
-    Context = AppContext
+    Context = ModuleContext
   > = Resolver<R, Parent, Context>;
   export type LastNameResolver<
     R = string,
     Parent = User,
-    Context = AppContext
+    Context = ModuleContext
   > = Resolver<R, Parent, Context>;
   export type FullNameResolver<
     R = string,
     Parent = User,
-    Context = AppContext
+    Context = ModuleContext
   > = Resolver<R, Parent, Context>;
 }
 
 export namespace MutationResolvers {
-  export interface Resolvers<Context = AppContext, TypeParent = {}> {
+  export interface Resolvers<Context = ModuleContext, TypeParent = {}> {
     createUser?: CreateUserResolver<User, TypeParent, Context>;
   }
 
   export type CreateUserResolver<
     R = User,
     Parent = {},
-    Context = AppContext
+    Context = ModuleContext
   > = Resolver<R, Parent, Context, CreateUserArgs>;
   export interface CreateUserArgs {
     input: CreateUserInput;
@@ -159,7 +159,7 @@ export namespace MutationResolvers {
 export type SkipDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   SkipDirectiveArgs,
-  AppContext
+  ModuleContext
 >;
 export interface SkipDirectiveArgs {
   /** Skipped when true. */
@@ -170,7 +170,7 @@ export interface SkipDirectiveArgs {
 export type IncludeDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   IncludeDirectiveArgs,
-  AppContext
+  ModuleContext
 >;
 export interface IncludeDirectiveArgs {
   /** Included when true. */
@@ -181,9 +181,21 @@ export interface IncludeDirectiveArgs {
 export type DeprecatedDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   DeprecatedDirectiveArgs,
-  AppContext
+  ModuleContext
 >;
 export interface DeprecatedDirectiveArgs {
   /** Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax (as specified by [CommonMark](https://commonmark.org/). */
-  reason?: string | null;
+  reason?: string;
+}
+
+export interface IResolvers {
+  Query?: QueryResolvers.Resolvers;
+  User?: UserResolvers.Resolvers;
+  Mutation?: MutationResolvers.Resolvers;
+}
+
+export interface IDirectiveResolvers<Result> {
+  skip?: SkipDirectiveResolver<Result>;
+  include?: IncludeDirectiveResolver<Result>;
+  deprecated?: DeprecatedDirectiveResolver<Result>;
 }

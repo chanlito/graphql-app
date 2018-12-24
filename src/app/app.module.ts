@@ -1,8 +1,7 @@
 import { GraphQLModule } from '@graphql-modules/core';
-import { Request } from 'express';
 
-import { UserModule } from './user/user.module';
+import { UserModule } from './user';
 
-export const AppModule = new GraphQLModule<{}, Request, {}>({
+export const AppModule = new GraphQLModule({
   imports: [UserModule],
 });
