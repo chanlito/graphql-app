@@ -1,26 +1,19 @@
 {
   "compilerOptions": {
-    /* Basic Options */
     "module": "commonjs",
     "target": "es2017",
-    "lib": ["es2017", "esnext.asynciterable"],
+    "lib": ["dom", "es2017", "esnext.asynciterable"],
     "outDir": "dist",
     "sourceMap": true,
     "strict": true,
     "noImplicitAny": false,
     "esModuleInterop": true,
-
-    /* Custom module resolution */
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     },
-
-    /* Experimental Options */
-    "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
-    "emitDecoratorMetadata": true /* Enables experimental support for emitting type metadata for decorators. */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
