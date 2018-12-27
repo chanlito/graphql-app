@@ -3,11 +3,29 @@
     "outDir": "../dist/client",
     "rootDir": ".",
     "module": "esnext",
+    "moduleResolution": "node",
     "target": "esnext",
     "jsx": "preserve",
     "sourceMap": true,
+    "lib": ["dom", "esnext", "esnext.asynciterable"],
     "strict": true,
-    "lib": ["dom", "esnext", "esnext.asynciterable"]
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": [
+      "vue-tsx-support/enable-check",
+      "vue-tsx-support/options/enable-vue-router"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
-  "extends": "../tsconfig.json"
+  "include": [
+    "./**/*.js",
+    "./**/*.ts",
+    "./**/*.tsx",
+    "./**/*.vue",
+    "../typings"
+  ]
 }

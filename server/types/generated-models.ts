@@ -1,9 +1,37 @@
 export type Maybe<T> = T | null;
 
-export interface CreateUserInput {
+export interface SignInInput {
+  emailOrUsername: string;
+
+  password: string;
+}
+
+export interface SignUpInput {
+  email: string;
+
+  username: string;
+
+  password: string;
+
   firstName: string;
 
   lastName: string;
+}
+
+export type DateTime = any;
+
+// ====================================================
+// Scalars
+// ====================================================
+
+// ====================================================
+// Interfaces
+// ====================================================
+
+/** An object with an ID */
+export interface Node {
+  /** The id of the object. */
+  id: string;
 }
 
 // ====================================================
@@ -12,20 +40,40 @@ export interface CreateUserInput {
 
 export interface Query {
   user: User;
+
+  users: User[];
 }
 
-export interface User {
+export interface User extends Node {
   id: string;
+
+  email: string;
+
+  username: string;
+
+  password: string;
 
   firstName: string;
 
   lastName: string;
 
+  createdAt: DateTime;
+
+  updatedAt: DateTime;
+
   fullName: string;
 }
 
 export interface Mutation {
-  createUser: User;
+  signIn: AuthPayload;
+
+  signUp: AuthPayload;
+}
+
+export interface AuthPayload {
+  token: string;
+
+  user: User;
 }
 
 // ====================================================
@@ -35,11 +83,18 @@ export interface Mutation {
 export interface UserQueryArgs {
   id: string;
 }
-export interface CreateUserMutationArgs {
-  input: CreateUserInput;
+export interface SignInMutationArgs {
+  input: SignInInput;
+}
+export interface SignUpMutationArgs {
+  input: SignUpInput;
 }
 
-import { GraphQLResolveInfo } from 'graphql';
+import {
+  GraphQLResolveInfo,
+  GraphQLScalarType,
+  GraphQLScalarTypeConfig,
+} from 'graphql';
 
 import { ModuleContext } from '@graphql-modules/core';
 
@@ -95,6 +150,8 @@ export type DirectiveResolverFn<TResult, TArgs = {}, TContext = {}> = (
 export namespace QueryResolvers {
   export interface Resolvers<Context = ModuleContext, TypeParent = {}> {
     user?: UserResolver<User, TypeParent, Context>;
+
+    users?: UsersResolver<User[], TypeParent, Context>;
   }
 
   export type UserResolver<
@@ -105,20 +162,51 @@ export namespace QueryResolvers {
   export interface UserArgs {
     id: string;
   }
+
+  export type UsersResolver<
+    R = User[],
+    Parent = {},
+    Context = ModuleContext
+  > = Resolver<R, Parent, Context>;
 }
 
 export namespace UserResolvers {
   export interface Resolvers<Context = ModuleContext, TypeParent = User> {
     id?: IdResolver<string, TypeParent, Context>;
 
+    email?: EmailResolver<string, TypeParent, Context>;
+
+    username?: UsernameResolver<string, TypeParent, Context>;
+
+    password?: PasswordResolver<string, TypeParent, Context>;
+
     firstName?: FirstNameResolver<string, TypeParent, Context>;
 
     lastName?: LastNameResolver<string, TypeParent, Context>;
+
+    createdAt?: CreatedAtResolver<DateTime, TypeParent, Context>;
+
+    updatedAt?: UpdatedAtResolver<DateTime, TypeParent, Context>;
 
     fullName?: FullNameResolver<string, TypeParent, Context>;
   }
 
   export type IdResolver<
+    R = string,
+    Parent = User,
+    Context = ModuleContext
+  > = Resolver<R, Parent, Context>;
+  export type EmailResolver<
+    R = string,
+    Parent = User,
+    Context = ModuleContext
+  > = Resolver<R, Parent, Context>;
+  export type UsernameResolver<
+    R = string,
+    Parent = User,
+    Context = ModuleContext
+  > = Resolver<R, Parent, Context>;
+  export type PasswordResolver<
     R = string,
     Parent = User,
     Context = ModuleContext
@@ -133,6 +221,16 @@ export namespace UserResolvers {
     Parent = User,
     Context = ModuleContext
   > = Resolver<R, Parent, Context>;
+  export type CreatedAtResolver<
+    R = DateTime,
+    Parent = User,
+    Context = ModuleContext
+  > = Resolver<R, Parent, Context>;
+  export type UpdatedAtResolver<
+    R = DateTime,
+    Parent = User,
+    Context = ModuleContext
+  > = Resolver<R, Parent, Context>;
   export type FullNameResolver<
     R = string,
     Parent = User,
@@ -142,17 +240,62 @@ export namespace UserResolvers {
 
 export namespace MutationResolvers {
   export interface Resolvers<Context = ModuleContext, TypeParent = {}> {
-    createUser?: CreateUserResolver<User, TypeParent, Context>;
+    signIn?: SignInResolver<AuthPayload, TypeParent, Context>;
+
+    signUp?: SignUpResolver<AuthPayload, TypeParent, Context>;
   }
 
-  export type CreateUserResolver<
-    R = User,
+  export type SignInResolver<
+    R = AuthPayload,
     Parent = {},
     Context = ModuleContext
-  > = Resolver<R, Parent, Context, CreateUserArgs>;
-  export interface CreateUserArgs {
-    input: CreateUserInput;
+  > = Resolver<R, Parent, Context, SignInArgs>;
+  export interface SignInArgs {
+    input: SignInInput;
   }
+
+  export type SignUpResolver<
+    R = AuthPayload,
+    Parent = {},
+    Context = ModuleContext
+  > = Resolver<R, Parent, Context, SignUpArgs>;
+  export interface SignUpArgs {
+    input: SignUpInput;
+  }
+}
+
+export namespace AuthPayloadResolvers {
+  export interface Resolvers<
+    Context = ModuleContext,
+    TypeParent = AuthPayload
+  > {
+    token?: TokenResolver<string, TypeParent, Context>;
+
+    user?: UserResolver<User, TypeParent, Context>;
+  }
+
+  export type TokenResolver<
+    R = string,
+    Parent = AuthPayload,
+    Context = ModuleContext
+  > = Resolver<R, Parent, Context>;
+  export type UserResolver<
+    R = User,
+    Parent = AuthPayload,
+    Context = ModuleContext
+  > = Resolver<R, Parent, Context>;
+}
+
+/** An object with an ID */
+export namespace NodeResolvers {
+  export interface Resolvers {
+    __resolveType: ResolveType;
+  }
+  export type ResolveType<
+    R = 'User',
+    Parent = User,
+    Context = ModuleContext
+  > = TypeResolveFn<R, Parent, Context>;
 }
 
 /** Directs the executor to skip this field or fragment when the `if` argument is true. */
@@ -188,10 +331,18 @@ export interface DeprecatedDirectiveArgs {
   reason?: string;
 }
 
+export interface DateTimeScalarConfig
+  extends GraphQLScalarTypeConfig<DateTime, any> {
+  name: 'DateTime';
+}
+
 export interface IResolvers {
   Query?: QueryResolvers.Resolvers;
   User?: UserResolvers.Resolvers;
   Mutation?: MutationResolvers.Resolvers;
+  AuthPayload?: AuthPayloadResolvers.Resolvers;
+  Node?: NodeResolvers.Resolvers;
+  DateTime?: GraphQLScalarType;
 }
 
 export interface IDirectiveResolvers<Result> {

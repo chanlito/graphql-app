@@ -1,12 +1,20 @@
 # A URL to your GraphQL endpoint, a local path to .graphql file, a glob pattern to your GraphQL schema files,
 # or a JavaScript file that exports the schema to generate code from.
 # This can also be an array which specifies multiple schemas to generate code from.
-schema: server/app/app.schema.ts
+schema: ./server/app/app.schema.ts
+
+require:
+  - ts-node/register/transpile-only
 
 # A map where the key represents an output path for the generated code
 # and the value represents a set of options which are relevant for that specific file.
 generates:
-  server/types/generated-models.ts:
+  ./client/graphql/types.ts:
+    documents: ./client/graphql/**/*.{ts,tsx}
+    plugins:
+      - typescript-common
+      - typescript-client
+  ./server/types/generated-models.ts:
     config:
       contextType: '@graphql-modules/core#ModuleContext'
     plugins:
