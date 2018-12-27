@@ -48,10 +48,11 @@
     "typescript": "^3.2.2"
   },
   "nodemonConfig": {
-    "exec": "ts-node -r dotenv/config -r tsconfig-paths/register --files src/main.ts",
-    "ext": "ts, graphql",
+    "exec": "ts-node -r dotenv/config -r tsconfig-paths/register --files -P server/tsconfig.json server/main.ts",
+    "ext": "js, ts, graphql",
     "watch": [
-      "src"
+      "server",
+      "nuxt.config.js"
     ]
   },
   "prettier": {

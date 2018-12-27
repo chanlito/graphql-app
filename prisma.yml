@@ -1,16 +1,16 @@
 endpoint: ${env:PRISMA_ENDPOINT}
 secret: ${env:PRISMA_MANAGEMENT_API_SECRET}
 
-datamodel: src/app/app.datamodel.graphql
+datamodel: server/app/app.datamodel.graphql
 
 # seed:
-#   import: src/app/app.dataseed.graphql
+#   import: server/app/app.dataseed.graphql
 
 generate:
   - generator: typescript-client
-    output: src/lib/prisma/prisma-client
+    output: server/lib/prisma/prisma-client
   - generator: graphql-schema
-    output: src/lib/prisma
+    output: server/lib/prisma
 
 hooks:
   post-deploy:
