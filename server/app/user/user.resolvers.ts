@@ -1,6 +1,6 @@
-import { UserNotFoundError } from '@/lib/errors';
-import { Prisma as PrismaClient } from '@/lib/prisma/prisma-client';
-import { MutationResolvers, QueryResolvers, UserResolvers } from '@/types';
+import { UserNotFoundError } from '../../lib/errors';
+import { Prisma as PrismaClient } from '../../lib/prisma/prisma-client';
+import { MutationResolvers, QueryResolvers, UserResolvers } from '../../types';
 
 export const Mutation: MutationResolvers.Resolvers = {
   createUser: async (_, args, { injector }, info) => {

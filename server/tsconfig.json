@@ -5,11 +5,7 @@
     "lib": ["dom", "es2017", "esnext.asynciterable"],
     "noImplicitAny": false,
     "outDir": "../dist/server",
-    "rootDir": ".",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    }
+    "rootDir": "."
   },
   "extends": "../tsconfig.json"
 }

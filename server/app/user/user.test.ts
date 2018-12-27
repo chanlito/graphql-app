@@ -1,6 +1,7 @@
-import { query, mutate } from '@/lib/test-utils';
 import { gql } from 'apollo-server-core';
-import { prisma } from '@/lib/prisma/prisma-client';
+
+import { prisma } from '../../lib/prisma/prisma-client';
+import { mutate, query } from '../../lib/test-utils';
 
 let newUserId;
 

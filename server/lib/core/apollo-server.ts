@@ -1,7 +1,7 @@
 import { ApolloServer } from 'apollo-server-express';
 import { Request, Response } from 'express';
 
-import { AppModule } from '@/app/app.module';
+import { AppModule } from '../../app/app.module';
 import { initPrismaBinding } from '../prisma/prisma-binding';
 
 const { schema, context, resolvers } = AppModule;

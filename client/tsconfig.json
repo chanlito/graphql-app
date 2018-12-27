@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "outDir": "../dist/client",
+    "rootDir": ".",
+    "module": "esnext",
+    "target": "esnext",
+    "jsx": "preserve",
+    "sourceMap": true,
+    "strict": true,
+    "lib": ["dom", "esnext", "esnext.asynciterable"]
+  },
+  "extends": "../tsconfig.json"
+}

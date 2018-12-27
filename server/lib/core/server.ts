@@ -1,12 +1,28 @@
+import express from 'express';
 import { createServer } from 'http';
+import { Builder, Nuxt } from 'nuxt-edge';
+import { resolve } from 'path';
 
 import apolloServer from './apollo-server';
-import app from './app';
 
-apolloServer.applyMiddleware({ app, path: '/' });
+const nuxtConfig = require(resolve('.', 'nuxt.config.js'));
 
-const server = createServer(app);
+const dev = process.env.NODE_ENV === 'development';
 
-apolloServer.installSubscriptionHandlers(server);
+export default async function createHttpServer() {
+  const app = express();
 
-export default server;
+  apolloServer.applyMiddleware({ app, path: '/graphql' });
+
+  const server = createServer(app);
+
+  apolloServer.installSubscriptionHandlers(server);
+
+  const nuxt = new Nuxt({ dev, ...nuxtConfig });
+
+  if (dev) await new Builder(nuxt).build();
+
+  app.use(nuxt.render);
+
+  return server;
+}
