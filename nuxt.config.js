@@ -66,6 +66,8 @@ module.exports = {
     'cookie-universal-nuxt',
   ],
   apollo: {
+    tokenName: 'access-token',
+    tokenExpires: 14,
     clientConfigs: {
       default: '@/plugins/vue-apollo',
     },

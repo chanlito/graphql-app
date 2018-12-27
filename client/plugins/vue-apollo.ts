@@ -1,24 +1,6 @@
-import Cookie from 'cookie-universal';
+import { NuxtContext } from 'nuxt';
 
-const cookie = Cookie();
-
-const clientState = {
-  defaults: {
-    connected: cookie.get('connected') || '0',
-    token: cookie.get('apollo-token') || '',
-  },
-  resolvers: {
-    Mutation: {
-      setConnected: (root, { value }, { cache }) => {
-        const data = { connected: value };
-        cache.writeData({ data });
-        return null;
-      },
-    },
-  },
-};
-
-export default ctx => ({
+export default (ctx: NuxtContext) => ({
   httpEndpoint: 'http://localhost:4000/graphql',
-  clientState,
+  wsEndpoint: 'ws://localhost:4000',
 });

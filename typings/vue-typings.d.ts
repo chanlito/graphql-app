@@ -4,7 +4,6 @@ import { NuxtContext } from 'nuxt';
 import { ErrorBag, FieldFlagsBag } from 'vee-validate';
 import Vue from 'vue';
 import { VueApolloComponentOption } from 'vue-apollo/types/options';
-import { ApolloProperty } from 'vue-apollo/types/vue-apollo';
 import { VuetifyObject } from 'vuetify';
 
 declare module 'vue/types/vue' {
@@ -12,7 +11,6 @@ declare module 'vue/types/vue' {
     /**
      * Vue & Nuxt Apollo typings.
      */
-    $apollo: ApolloProperty<any>;
     $apolloHelpers: {
       onLogin(
         token: string,
@@ -42,7 +40,6 @@ declare module 'vue/types/vue' {
 
 declare module 'vue/types/options' {
   interface ComponentOptions<V extends Vue> {
-    apollo?: VueApolloComponentOption<V>;
     asyncData?: (ctx: NuxtContext) => Promise<any>;
     fetch?: (ctx: NuxtContext) => Promise<any>;
     layout?: string;

@@ -1,4 +1,5 @@
-import gql from 'graphql-tag';
+import { SignInMutation } from '@/graphql/mutations';
+import { SignIn } from '@/graphql/types';
 import Vue, { VNode } from 'vue';
 import { VBtn, VCard, VCardActions, VCardText, VTextField } from 'vuetify-tsx';
 
@@ -24,28 +25,21 @@ export default Vue.extend({
         return;
       }
 
-      const res = await this.$apollo.mutate({
-        mutation: gql`
-          mutation($emailOrUsername: String!, $password: String!) {
-            signIn(
-              input: { emailOrUsername: $emailOrUsername, password: $password }
-            ) {
-              token
-              user {
-                id
-              }
-            }
-          }
-        `,
+      const {
+        data: {
+          signIn: { token },
+        },
+      } = await this.$apollo.mutate<SignIn.Mutation>({
+        mutation: SignInMutation,
         variables: {
           emailOrUsername: this.username,
           password: this.password,
-        },
+        } as SignIn.Variables,
       });
 
-      await this.$apolloHelpers.onLogin(res.data.signIn.token);
+      await this.$apolloHelpers.onLogin(token);
 
-      console.log('Result', res);
+      this.$router.push('/');
     },
   },
   render(): VNode {
@@ -74,7 +68,12 @@ export default Vue.extend({
             />
           </VCardText>
           <VCardActions class="px-3 pt-0 pb-3">
-            <VBtn block color="primary" type="submit">
+            <VBtn
+              loading={this.$apollo.loading}
+              block
+              color="primary"
+              type="submit"
+            >
               Sign In
             </VBtn>
           </VCardActions>

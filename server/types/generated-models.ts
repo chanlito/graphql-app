@@ -18,22 +18,6 @@ export interface SignUpInput {
   lastName: string;
 }
 
-export type DateTime = any;
-
-// ====================================================
-// Scalars
-// ====================================================
-
-// ====================================================
-// Interfaces
-// ====================================================
-
-/** An object with an ID */
-export interface Node {
-  /** The id of the object. */
-  id: string;
-}
-
 // ====================================================
 // Types
 // ====================================================
@@ -44,22 +28,16 @@ export interface Query {
   users: User[];
 }
 
-export interface User extends Node {
+export interface User {
   id: string;
 
   email: string;
 
   username: string;
 
-  password: string;
-
   firstName: string;
 
   lastName: string;
-
-  createdAt: DateTime;
-
-  updatedAt: DateTime;
 
   fullName: string;
 }
@@ -90,11 +68,7 @@ export interface SignUpMutationArgs {
   input: SignUpInput;
 }
 
-import {
-  GraphQLResolveInfo,
-  GraphQLScalarType,
-  GraphQLScalarTypeConfig,
-} from 'graphql';
+import { GraphQLResolveInfo } from 'graphql';
 
 import { ModuleContext } from '@graphql-modules/core';
 
@@ -178,15 +152,9 @@ export namespace UserResolvers {
 
     username?: UsernameResolver<string, TypeParent, Context>;
 
-    password?: PasswordResolver<string, TypeParent, Context>;
-
     firstName?: FirstNameResolver<string, TypeParent, Context>;
 
     lastName?: LastNameResolver<string, TypeParent, Context>;
-
-    createdAt?: CreatedAtResolver<DateTime, TypeParent, Context>;
-
-    updatedAt?: UpdatedAtResolver<DateTime, TypeParent, Context>;
 
     fullName?: FullNameResolver<string, TypeParent, Context>;
   }
@@ -206,11 +174,6 @@ export namespace UserResolvers {
     Parent = User,
     Context = ModuleContext
   > = Resolver<R, Parent, Context>;
-  export type PasswordResolver<
-    R = string,
-    Parent = User,
-    Context = ModuleContext
-  > = Resolver<R, Parent, Context>;
   export type FirstNameResolver<
     R = string,
     Parent = User,
@@ -218,16 +181,6 @@ export namespace UserResolvers {
   > = Resolver<R, Parent, Context>;
   export type LastNameResolver<
     R = string,
-    Parent = User,
-    Context = ModuleContext
-  > = Resolver<R, Parent, Context>;
-  export type CreatedAtResolver<
-    R = DateTime,
-    Parent = User,
-    Context = ModuleContext
-  > = Resolver<R, Parent, Context>;
-  export type UpdatedAtResolver<
-    R = DateTime,
     Parent = User,
     Context = ModuleContext
   > = Resolver<R, Parent, Context>;
@@ -286,18 +239,6 @@ export namespace AuthPayloadResolvers {
   > = Resolver<R, Parent, Context>;
 }
 
-/** An object with an ID */
-export namespace NodeResolvers {
-  export interface Resolvers {
-    __resolveType: ResolveType;
-  }
-  export type ResolveType<
-    R = 'User',
-    Parent = User,
-    Context = ModuleContext
-  > = TypeResolveFn<R, Parent, Context>;
-}
-
 /** Directs the executor to skip this field or fragment when the `if` argument is true. */
 export type SkipDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
@@ -331,18 +272,11 @@ export interface DeprecatedDirectiveArgs {
   reason?: string;
 }
 
-export interface DateTimeScalarConfig
-  extends GraphQLScalarTypeConfig<DateTime, any> {
-  name: 'DateTime';
-}
-
 export interface IResolvers {
   Query?: QueryResolvers.Resolvers;
   User?: UserResolvers.Resolvers;
   Mutation?: MutationResolvers.Resolvers;
   AuthPayload?: AuthPayloadResolvers.Resolvers;
-  Node?: NodeResolvers.Resolvers;
-  DateTime?: GraphQLScalarType;
 }
 
 export interface IDirectiveResolvers<Result> {
