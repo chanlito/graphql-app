@@ -5,6 +5,7 @@ import { component } from 'vue-tsx-support';
 import { VBtn, VCard, VCardActions, VCardText, VTextField } from 'vuetify-tsx';
 
 export default component({
+  name: 'SignIn',
   layout: 'auth',
   data() {
     return {

@@ -48,6 +48,12 @@ module.exports = {
      */
     typescript: true,
     /**
+     * `useForkTsChecker` enables a webpack plugin that runs typescript type checker on a separate process.
+     */
+    useForkTsChecker: {
+      tsconfig: './client/tsconfig.json',
+    },
+    /**
      * Use the `extend` function to customize webpack configuration.
      */
     extend(config, context) {
