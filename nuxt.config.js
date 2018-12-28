@@ -31,6 +31,18 @@ module.exports = {
    * Customize the webpack configuration.
    */
   build: {
+    babel: {
+      plugins: [
+        [
+          'import',
+          {
+            libraryName: 'vuetify-tsx',
+            libraryDirectory: 'lib',
+            camel2DashComponentName: false,
+          },
+        ],
+      ],
+    },
     /**
      * Set `typescript` property to true to enable typescript support.
      */
@@ -38,7 +50,10 @@ module.exports = {
     /**
      * Use the `extend` function to customize webpack configuration.
      */
-    extend(config, context) {},
+    extend(config, context) {
+      const rule = config.module.rules.find(rule => rule.test.test('.tsx'));
+      rule.use.push({ loader: 'vue-jsx-hot-loader' });
+    },
     /**
      * `VuetifyLoaderPlugin` will automatically import all the vuetify components
      * you use, where you use them.

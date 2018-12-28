@@ -1,9 +1,10 @@
 import { SignInMutation } from '@/graphql/mutations';
 import { SignIn } from '@/graphql/types';
 import Vue, { VNode } from 'vue';
+import { component } from 'vue-tsx-support';
 import { VBtn, VCard, VCardActions, VCardText, VTextField } from 'vuetify-tsx';
 
-export default Vue.extend({
+export default component({
   layout: 'auth',
   data() {
     return {

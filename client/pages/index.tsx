@@ -3,6 +3,10 @@ import { VContainer } from 'vuetify-tsx';
 
 export default component({
   render() {
-    return <VContainer>My Component</VContainer>;
+    return (
+      <VContainer fluid>
+        Home!!!
+      </VContainer>
+    );
   },
 });
